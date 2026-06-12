@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sistem Verifikasi Pengiriman dan Penerimaan Barang Berbasis Web dan QR Code pada PT. Indonesia Epson Industry</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #4E99EA;
+      --accent-light: #1F2123;
+      --text-primary: #D6D3CD;
+      --text-secondary: #B1AAA0;
+      --text-muted: #9ca3af;
+      --bg: #181A1B;
+      --bg-secondary: #151718;
+      --border: #363B3D;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      color: var(--text-primary);
+      background: var(--bg);
+      line-height: 1.7;
+    }
+
+    /* ─── LAYOUT ─── */
+    .container { max-width: 1350px; margin: 0 auto; padding: 0 2rem;}
+
+    /* ─── HERO ─── */
+    .hero {
+      padding: 4rem 0 3rem;
+      background:#0F1111;
+      padding: 0 2rem;
+    }
+    .hero h1 {
+      font-size: clamp(22px, 4vw, 32px);
+      font-weight: 700;
+      line-height: 1.25;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 18px;
+      color: var(--text-secondary);
+      text-indent: 2em;
+    }
+    .logo {
+      max-width:500px;
+      margin: 0 auto 1.5rem;
+    }
+
+    /* ─── SECTION ─── */
+    section { padding: 3rem 2rem; background:#0F1111;}
+    section:last-of-type { border-bottom: none; }
+    .section-eyebrow {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-size: 25px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    /* ─── TEAM ─── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+    .team-grid-bottom {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .team-grid-bottom .team-card {
+      width: calc(33.33% - 6px);
+    }
+    .team-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem 1rem;
+      text-align: center;
+    }
+    .avatar {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 0.75rem;
+    }
+    .team-card .member-name { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+    .team-card .member-nim  { font-size: 14px; color: var(--text-muted); margin: 2px 0 6px; font-family: monospace; }
+    .team-card .member-role {
+      display: inline-block;
+      font-size: 14px; font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 3px 8px;
+      border-radius: 100px;
+    }
+
+    .list h3 { font-size: 20px; font-weight: 700; color: var(--text-primary); margin-bottom: 0.75rem; }
+    .list ul { list-style: none; }
+    .list ul li {
+      font-size: 18px;
+      color: var(--text-secondary);
+      padding: 5px 0;
+      border-bottom: 1px;
+      display: flex;
+      gap: 8px;
+    }
+    .list ul li:last-child { border-bottom: none; }
+    .list ul li::before { content: "*"; color: var(--accent); flex-shrink: 0; }
+
+    /* ─── TECH STACK ─── */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 10px;
+    }
+    .stack-item {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .stack-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: var(--accent-light);
+      color: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .stack-item span { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+
+    /* ─── DEMO IMAGE ─── */
+    .demo-img {
+      width: 100%;
+      aspect-ratio: 16/7;
+      background: var(--bg-secondary);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      gap: 8px;
+      margin-bottom: 1.5rem;
+    }
+    .demo-img svg { width: 36px; height: 36px; opacity: 0.4; }
+
+    /* ─── METRICS ─── */
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+    .metric {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+    }
+    .metric .val { font-size: 28px; font-weight: 700; color: var(--text-primary); }
+    .metric .lbl { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+    .Solusi {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      text-indent: 2em;
+      margin-bottom: 1rem;
+    }
+    .Kesimpulan {
+      font-size: 18px;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      text-indent: 2em;
+      margin-bottom: 1rem;
+    }
+
+    .gap { height: 1.5rem; }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <div class="hero">
+      <h1>Sistem Verifikasi Pengiriman dan Penerimaan Barang Berbasis Web dan QR Code pada PT. Indonesia Epson Industry</h1>
+      <div class="logo">
+        <img src="Foto\Evy.png" alt="Logo" style="width:100%; height:auto; object-fit:contain;">
+      </div>
+      <p>
+        Sistem yang dikembangkan untuk mengatasi permasalahan sinkronisasi data pengiriman antara vendor dan pabrik yang saat ini masih mengandalkan proses manual, sehingga mengakibatkan rendahnya integritas data dan keterlambatan deteksi selisih barang (discrepancy)
+      </p>
+    </div>
+
+    <section>   
+      <div class="section-eyebrow">Tim</div>
+      <div class="section-title">Meet Our Team</div>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="avatar">
+            <img src="Foto\Avatar_Jenni.jpg" alt="Nama Anggota 1" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <div class="member-name">Jennifer Leonardi</div>
+          <div class="member-nim">235150401111054</div>
+          <div class="member-role">Product Manager</div>
+        </div>
+        <div class="team-card">
+          <div class="avatar">
+            <img src="Foto\Avatar_Alfi.jpg" alt="Nama Anggota 1" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <div class="member-name">Muhamad Alfi Tsani Ramadhan</div>
+          <div class="member-nim">235150401111049</div>
+          <div class="member-role">Product Manager</div>
+        </div>
+        <div class="team-card">
+          <div class="avatar">
+            <img src="Foto\Avatar_Rissa.jpg" alt="Nama Anggota 1" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <div class="member-name">Savina Larissa Anjani</div>
+          <div class="member-nim">235150300111027</div>
+          <div class="member-role">Frontend Engineer</div>
+        </div>
+        <div class="team-card">
+          <div class="avatar">
+            <img src="Foto\Avatar_Fachri.jpg" alt="Nama Anggota 1" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <div class="member-name">Muhammad Fachri Afrizal</div>
+          <div class="member-nim">235150701111013</div>
+          <div class="member-role">Backend Engineer</div>
+        </div>
+        <div class="team-card">
+          <div class="avatar">
+            <img src="Foto\Avatar_Arif.jpg" alt="Nama Anggota 1" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <div class="member-name">Muhammad Fauzan Arif</div>
+          <div class="member-nim">235150707111015</div>
+          <div class="member-role">Backend Engineer</div>
+        </div>
+        <div class="team-card">
+          <div class="avatar">
+            <img src="Foto\Avatar_Rafael.jpg" alt="Nama Anggota 1" style="width:100%; height:100%; object-fit:cover; border-radius:50%;">
+          </div>
+          <div class="member-name">Rafael Anggara Putra</div>
+          <div class="member-nim">225150207111114</div>
+          <div class="member-role">Backend Engineer</div>
+      </div>
+    </section>
+
+    <!-- Latar Belakang-->
+    <section>
+      <div class="section-eyebrow">Latar belakang</div>
+      <div class="section-title">Rumusan Masalah</div>
+      <div class="list">
+        <h3>Masalah yang diselesaikan adalah:</h3>
+        <ul>
+          <li>Terhambatnya deteksi discrepancy barang (match, mismatch, missing, atau over)</li>
+          <li>Ketiadaan audit trail digital yang valid (seperti bukti foto dan timestamp) untuk keperluan verifikasi dan klaim</li>
+          <li>Ketidak efektifan proses tindak lanjut operasional akibat lambatnya ketersediaan data analitik</li>
+        </ul>
+      </div>
+      <div class="gap"></div>
+      
+      <div class="section-title">Tujuan</div>
+      <div class="list">
+        <h3>Tujuan dari proyek ini adalah:</h3>
+        <ul>
+          <li>Mengurangi ketergantungan pada pencatatan manual melalui mekanisme verifikasi digital yang lebih cepat dan terstruktur</li>
+          <li>Menyediakan dashboard monitoring, audit trail digital, serta laporan discrepancy yang dapat digunakan untuk pengambilan keputusan secara lebih cepat dan akurat.</li>
+          <li>Memperoleh visibilitas terhadap status pengiriman secara real-time sehingga dapat segera menindaklanjuti permasalahan yang muncul./li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Solusi -->
+    <section>
+      <div class="section-eyebrow">Solusi</div>
+      <div class="section-title">Solusi Permasalahan</div>
+      <div class="Solusi">
+        Solusi yang dibangun adalah platform verifikasi logistik berbasis web yang mengintegrasikan teknologi QR Code dengan mekanisme 
+        penguncian data digital (data locking) untuk memastikan manifes pengiriman bersifat read-only sejak barang meninggalkan lokasi vendor. 
+        Tujuan sistem ini adalah untuk menjamin akurasi rekonsiliasi data secara real-time dan menyediakan jejak audit digital yang valid, guna 
+        meningkatkan efisiensi operasional serta meminimalkan kerugian akibat ketidaksesuaian barang
+      </div>
+    </section>
+
+    <!-- DESAIN SISTEM -->
+    <section>
+      <div class="section-eyebrow">Desain Sistem</div>
+      <div class="section-title">Arsitektur</div>
+      <div style="text-align: center;">
+        <img src="Foto\Arsitektur.png" alt="Logo" style="width:1000px; height:auto; object-fit:contain;">
+      </div>
+      <div class="section-title">ERD</div>
+      <div style="text-align: center;">
+        <img src="Foto\Erd_L.png" alt="Logo" style="width:750px; height:auto; object-fit:contain;">
+      </div><div class="section-title">Activity Diagram</div>
+      <div style="text-align: center;">
+        <img src="Foto\Act_Diag.jpg" alt="Logo" style="width:500px; height:auto; object-fit:contain;">
+      </div>
+    </section>
+
+    <!-- DEMO & TAMPILAN WEB -->
+    <section>
+      <div class="section-eyebrow">Demo & Tampilan Website</div>
+      <div class="section-title">Demo</div>
+      <div style="font-size:18px; color:var(--text-secondary);">
+        <p>
+          Skenario demo alur penggunaan sistem. Dimulai dari pengisian data oleh vendor, hingga verifikasi serta monitoring dari pihak pabrik
+        </p>
+      </div>
+      <a href="#" style="color:var(--accent);">Link Demo (Google Drive / YouTube)</a>
+      <div class="gap"></div>
+
+      <div class="section-title">Tampilan Website</div>
+      <div style="text-align: center;">
+        <img src="Foto\web-1.jpg" alt="Logo" style="width:800px; height:auto; object-fit:contain;">
+        <img src="Foto\web-2.jpg" alt="Logo" style="width:800px; height:auto; object-fit:contain;">
+        <img src="Foto\web-3.png" alt="Logo" style="width:800px; height:auto; object-fit:contain;">
+      </div>
+    </section>
+
+    <!-- KESIMPULAN -->
+    <section>
+      <div class="section-eyebrow">Penutup</div>
+      <div class="section-title">Kesimpulan</div>
+      <p class="Kesimpulan">
+        Berdasarkan proses analisis, perancangan, implementasi, dan pengujian yang telah dilakukan, Sistem Verifikasi Pengiriman dan Penerimaan Barang Berbasis Web dan QR Code pada PT. Indonesia Epson Industry berhasil dikembangkan sesuai dengan kebutuhan utama pengguna. Sistem mampu mendukung proses verifikasi pengiriman barang secara digital melalui fitur autentikasi pengguna, pengelolaan data shipment, generasi dan pemindaian QR Code, pencatatan jumlah barang, penyimpanan data terintegrasi, serta deteksi discrepancy secara otomatis. Hasil pengujian menunjukkan bahwa seluruh fungsi utama sistem berjalan dengan baik dan mampu membantu mengurangi ketergantungan pada proses pencatatan manual yang berpotensi menimbulkan human error.
+      </p>
+      <p class="Kesimpulan">
+        Selain meningkatkan akurasi dan transparansi proses verifikasi, sistem juga menyediakan audit trail digital yang memudahkan proses monitoring dan tindak lanjut terhadap ketidaksesuaian barang. Meskipun demikian, masih ditemukan beberapa aspek yang dapat ditingkatkan, terutama pada performa pemuatan dashboard dan laporan pengiriman yang memerlukan waktu respons lebih lama ketika menangani data dalam jumlah besar. Secara keseluruhan, sistem telah memenuhi tujuan proyek sebagai solusi digital untuk mendukung proses rekonsiliasi data pengiriman dan penerimaan barang yang lebih efektif dan efisien.
+      </p>
+    </section>
+
+    <!-- Lampiran -->
+    <section>
+      <div class="section-eyebrow">Lampiran</div>
+      <div class="section-title">Lampiran</div>
+      <div style="font-size:18px; color:var(--text-secondary);">
+        <p>
+          Screenshot fitur lengkap
+        </p>
+      </div>
+      <a href="https://drive.google.com/drive/folders/1QI2GEmVyPlLxyGNpfFS68FZQE34j8Pu9?usp=sharing" style="color:var(--accent);">Link Demo (Google Drive / YouTube)</a>
+      <div class="gap"></div>
+      <div class="section-title">Repository Github</div>
+      <div class="list">
+        <ul>
+          <li><a href="https://github.com/MFachriA96/frontendct.git" style="color:var(--accent);" target="_blank">Frontend Repository</a></li>
+          <li><a href="https://github.com/MFachriA96/capstonea1.git" style="color:var(--accent);" target="_blank">Backend Repository</a></li>
+        </ul>
+    </section>
+
+  </div>
+
+</body>
+</html>
